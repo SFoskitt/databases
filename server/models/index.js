@@ -1,50 +1,37 @@
 var db = require('../db');
 
 
-
-
 module.exports = {
   messages: {
-    get: function () {
-      // db.dbConnection.connect()
-      db.dbConnection.query("SELECT * FROM messages;", function(err, result){
+    get: function (callback) {
+      var queryString = "select * from messages"
+      db.dbConnection.query(queryString, function(err, result){
         if (err) throw err;
-        console.log("MESSAGES GET SUCCESS!", result)
+        callback(result)
       })
-      // db.dbConnection.end()
-    }, // a function which produces all the messages
-    post: function (username, message, roomname) {
-      // db.dbConnection.connect()
-      db.dbConnection.query("INSERT INTO messages (username,text,roomname) VALUES (?,?,?);", [username, message, roomname], function(err){
+    }, 
+    post: function (message, roomname, username, callback) {
+      var params = [message, roomname, username]
+      var queryString='INSERT INTO messages (text, roomname, user_id) VALUES (?,?,(SELECT id FROM users WHERE name = ?));'
+      db.dbConnection.query(queryString, params,function(err, result){
         if (err) throw err;
+        callback(result)
       })
-      // db.dbConnection.end()
-      console.log("inside models, messages.post")
-     // a function which can be used to insert a message into the database
     }
   },
 
   users: {
-    // Ditto as above.
-    get: function () {
-      // db.dbConnection.connect()
+    get: function (callback) {
       db.dbConnection.query('SELECT * FROM users;', function(err, result){
         if (err) throw err;
-        console.log("users, GET result",result)
+        callback(result)
       })
-      // db.dbConnection.end()
     },
-    post: function (user) {
-      //console.log("USER",user)
-      // db.dbConnection.connect()
-      // db.dbConnection.query("INSERT INTO users (name) VALUES ('"+user+"');", function(err, result, fields){
+    post: function (user, callback) {
       db.dbConnection.query('INSERT INTO users (name) VALUES (?);',[user], function(err, result, fields){
-        // db.dbConnection.query('SELECT * FROM users;', function(err, result){
         if (err) throw err;
-        console.log("POST result",result)
-        console.log("query string: ", "INSERT INTO users (name) VALUES ('"+user+"');");
+        callback(result)
       })
-      // db.dbConnection.end()
       
     }
   }

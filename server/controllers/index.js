@@ -7,12 +7,18 @@ var db = require('../db')
 module.exports = {
   messages: {
     get: function (req, res) {
-      models.messages.get();
-      console.log("inside controllers, messages.get")        
+      models.messages.get(function(result){
+        //if (err){console.log("messages.get error")};
+        res.json(result)
+      });
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      console.log("inside controllers")
-      models.messages.post(req.body.username, req.body.message, req.body.roomname)
+      var message = req.body.message;
+      var roomname= req.body.roomname;
+      var username = req.body.username;
+      models.messages.post(message, roomname, username, function(err, result){
+        res.json(result)
+      })
      // a function which handles posting a message to the database
     }
   },
@@ -20,14 +26,16 @@ module.exports = {
   users: {
     // Ditto as above
     get: function (req, res) {
-      models.users.get(function(result){
-      console.log("users result?", result);
+      models.users.get(function(err, result){
+        if (err){console.log("users.get error")};
+        res.json(result)
       });
-      console.log("inside controllers, users.get");
     },
     post: function (req, res) {
       //console.log("inside controllers users.post")
-      models.users.post(req.body.username)
+      models.users.post(req.body.username, function(err, result){
+        res.json(result)        
+      })
     }
   }
 }

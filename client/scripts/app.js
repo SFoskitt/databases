@@ -2,7 +2,7 @@
 
 	window.app = {
 		existingRooms:[],
-		server: 'https://api.parse.com/1/classes/chatterbox',
+		server: '127.0.0.1:3000/classes',
 		init: function(){
 
 		},
