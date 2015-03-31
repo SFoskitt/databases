@@ -7,33 +7,28 @@ var db = require('../db')
 module.exports = {
   messages: {
     get: function (req, res) {
-
-        
+      models.messages.get();
+      console.log("inside controllers, messages.get")        
     }, // a function which handles a get request for all messages
     post: function (req, res) {
-      //db.dbConnection.connect();
-      console.log("DATABASE:",db)
-      console.log(req.body.username)
-   //    req.on('data', function(data){
-   //      var parseData = JSON.parse(data);
-
-   //      models.messages.post(parseData.message);
-   //    }, function (err){
-   //      if (err) throw err;
-   //    }) // a function which handles posting a message to the database
-   // }
-}
-},
+      console.log("inside controllers")
+      models.messages.post(req.body.username, req.body.message, req.body.roomname)
+     // a function which handles posting a message to the database
+    }
+  },
 
   users: {
     // Ditto as above
-    get: function (req, res) {},
+    get: function (req, res) {
+      models.users.get(function(result){
+      console.log("users result?", result);
+      });
+      console.log("inside controllers, users.get");
+    },
     post: function (req, res) {
-      db.dbConnection.connect()
-      db.dbConnection.query("INSERT INTO users (name) VALUES ("+req.body.username+");")
-      db.dbConnection.end()
-      console.log("inside users controller")
+      //console.log("inside controllers users.post")
+      models.users.post(req.body.username)
     }
   }
-};
+}
 

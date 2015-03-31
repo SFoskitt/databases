@@ -4,7 +4,9 @@ USE chat;
 
 CREATE TABLE messages (
 user_id INT(3),
-text VARCHAR(140)
+username VARCHAR(20),
+text VARCHAR(140),
+roomname VARCHAR (20)
   /* Describe your table here.*/
 );
 
